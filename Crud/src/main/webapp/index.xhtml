@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:components="http://java.sun.com/jsf/composite/customComponents"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+     >
+
+
+<h:head>
+    <title>Title123</title>
+</h:head>
+
+<h:body>
+    <h1> Employees List </h1>
+
+
+    <p:commandButton value="Add" styleClass="ui-priority-primary" action="#{employees.opendialog}"
+                     oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog" >
+        <p:ajax listener="#{employees.opendialog}"/>
+
+
+    </p:commandButton>
+
+    <h:panelGroup id="wrapper">
+        <p:dataTable id="employeeTable" var="employee" value="#{employees.lazyModel}" lazy="true" paginator="true" rows="5"
+                     paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
+                      {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5">
+            <!--<p:ajax event="sort" listener="#{employees.onSort}"/>-->
+            <p:column headerText="#{msg['message.id']}" sortBy="#{employee.id}" id="ID">
+
+                <h:outputText value="#{employee.id}"/>
+            </p:column>
+            <p:column headerText="#{msg['message.name']}" sortBy="#{employee.name}" id="NAME"  >
+
+                <h:outputText value="#{employee.name}"/>
+            </p:column>
+            <p:column headerText="#{msg['message.position']}" sortBy="#{employee.position}" id="POSITION">
+
+                <h:outputText value="#{employee.position}"/>
+            </p:column>
+            <p:column headerText="#{msg['message.department']}" sortBy="#{employee.department}" id="DEPARTMENT">
+                <h:outputText value="#{employee.department}"/>
+            </p:column>
+            <p:column headerText="#{msg['message.edit']}">
+                              <p:commandButton value="Edit" action="#{employees.editEmployeeRecord(employee.id)}"
+                                 oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog">
+                </p:commandButton>
+
+
+            </p:column>
+            <p:column headerText="#{msg['message.delete']}">
+
+                <p:commandButton id="remove" value="Delete" update="employeeTable" style="margin-right:20px;"
+                                 actionListener="#{employees.deleteEmployeeRecord(employee.id)}"
+                                 onclick="return confirm('Are you sure?')">
+
+                    <p:ajax update="employeeTable" listener="#{employees.deleteEmployeeRecord(employee.id)}"/>
+                </p:commandButton>
+
+
+            </p:column>
+
+
+        </p:dataTable>
+    </h:panelGroup>
+    <!--Add section-->
+
+
+    <p:dialog header="Dynamic Focus" widgetVar="dlg" modal="true" closable="false" closeOnEscape="true" id="dialog">
+        <components:customComponents
+                nameValue="#{employees.name}"
+                nameErrorRender="#{employees.nameError}"
+                positionValue="#{employees.position}"
+                positionErrorRender="#{employees.positionError}"
+                departmentValue="#{employees.department}"
+                departmentErrorRender="#{employees.departmentError}"
+
+                addButton="#{employees.addEmployee()}"
+                saveButton="#{employees.updateEmployeeDetails()}"
+                calcel="#{employees.exitAndClear}"
+        />
+    </p:dialog>
+
+    <!--Edit section-->
+
+    <script type="text/javascript">
+        function handleLoginRequestExitAndClear(xhr, status, args) {
+            if (!args.notValid9) {
+                PF('dlg').hide();
+            }
+            else {
+                PF('dlg').hide();
+            }
+        }
+
+        function handleLoginRequestAdd(xhr, status, args) {
+            if (!args.notValid) {
+                PF('dlg').jq.effect("shake", {times: 5}, 100);
+            }
+            else {
+                PF('dlg').hide();
+            }
+        }
+
+        function handleLoginRequestEdit(xhr, status, args) {
+            if (!args.notValid) {
+                PF('dlg').jq.effect("shake", {times: 5}, 100);
+            }
+            else {
+                PF('dlg').hide();
+            }
+        }
+
+        function handleLoginRequest1(xhr, status, args) {
+            if (!args.notValid123) {
+                PF('dlg').show();
+            }
+            else {
+                PF('dlg').show();
+            }
+        }
+    </script>
+</h:body>
+
+</html>

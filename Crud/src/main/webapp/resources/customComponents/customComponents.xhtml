@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:tp="http://java.sun.com/jsp/jstl/functions" xmlns:com="http://java.sun.com/jstl/core"
+>
+
+<composite:interface>
+
+    <composite:attribute name="nameValue"/>
+    <composite:attribute name="nameErrorRender"/>
+    <composite:attribute name="positionValue"/>
+    <composite:attribute name="positionErrorRender"/>
+    <composite:attribute name="departmentValue"/>
+    <composite:attribute name="departmentErrorRender"/>
+    <composite:attribute name="addButton"
+                         method-signature = "java.lang.String index()"
+                   />
+    <composite:attribute name="saveButton"
+                         method-signature = "java.lang.String index()"
+                    />
+    <composite:attribute name="calcel"
+                         method-signature = "java.lang.String index()"
+                    />
+</composite:interface>
+<composite:implementation>
+
+    <h:form id="employeeForm">
+    <h:panelGrid id="popup" columns="1" cellpadding="5">
+
+    <h:outputText value="#{msg['message.nameEditCreate']}"/>
+    <h:inputText id="name" value="#{cc.attrs.nameValue}"/>
+    <h:outputText value="Please enter Name" rendered="#{cc.attrs.nameErrorRender}" for="name"
+                  style="color: red"/>
+
+    <h:outputText value="#{msg['message.positionEditCreate']}"/>
+    <h:inputText id="position" value="#{cc.attrs.positionValue}"/>
+    <h:outputText value="Please enter Position" rendered="#{cc.attrs.positionErrorRender}" for="position"
+                  style="color: red;"/>
+
+
+    <h:outputText value="#{msg['message.departmentEditCreate']}"/>
+    <h:inputText id="department" value="#{cc.attrs.departmentValue}"/>
+    <h:outputText value="Please enter Department" rendered="#{cc.attrs.departmentErrorRender}"
+                  for="department"
+                  style="color: red;"/>
+
+
+
+    <p:commandButton value="Add" action="#{cc.attrs.addButton}" rendered="#{employees.add}"
+                     update="popup employeeTable" styleClass="ui-priority-primary"
+                     oncomplete="handleLoginRequestAdd(xhr, status, args)">
+    </p:commandButton>
+
+
+    <p:commandButton value="save" action="#{cc.attrs.saveButton}" update="popup employeeTable"
+                     rendered="#{employees.save}" styleClass="ui-priority-primary"
+                     oncomplete="handleLoginRequestEdit(xhr, status, args)">
+    </p:commandButton>
+
+    <p:commandButton value="View Employees Record List"
+                     action="#{cc.attrs.calcel}" onclick="PF('dlg').hide()">
+
+    </p:commandButton>
+
+    </h:panelGrid>
+    </h:form>
+</composite:implementation>
+
+
+</html>
