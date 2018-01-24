@@ -12,10 +12,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,39 +29,39 @@ public class InDbEmployeeActions implements EmployeeActions {
     private DataSource dataSource;
 
 
-    public InDbEmployeeActions() {
-        try {
-            initCtx = new InitialContext();
-            this.dataSource = (DataSource) initCtx.lookup("java:/comp/env/jdbc/LocalDatabaseName");
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public Connection getConnection() {
-        try {
-            conn = dataSource.getConnection();
-            return conn;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-//    private Connection getConnection() {
-//
+//    public InDbEmployeeActions() {
 //        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb?useSSL=false", "root", "root");
-//            Statement stmtObj = conn.createStatement();
-//
-//        } catch (Exception sqlException) {
-//            sqlException.printStackTrace();
+//            initCtx = new InitialContext();
+//            this.dataSource = (DataSource) initCtx.lookup("java:/comp/env/jdbc/LocalDatabaseName");
+//        } catch (NamingException e) {
+//            e.printStackTrace();
 //        }
-//        return conn;
 //
 //    }
+//
+//    public Connection getConnection() {
+//        try {
+//            conn = dataSource.getConnection();
+//            return conn;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+    private Connection getConnection() {
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb?useSSL=false", "root", "root");
+            Statement stmtObj = conn.createStatement();
+
+        } catch (Exception sqlException) {
+            sqlException.printStackTrace();
+        }
+        return conn;
+
+    }
 
     @Override
     public String deleteEmployeeRecords(long employeeId) {
