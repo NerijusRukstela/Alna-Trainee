@@ -17,27 +17,8 @@ public class LazyModelHolder extends LazyDataModel<Employee> {
 
     @Override
     public List<Employee> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-
-        String sortName = "ASC";
-        if (sortOrder.name().equals("ASCENDING")) {
-            sortName = "ASC";
-        } else if (sortOrder.name().equals("DESCENDING")) {
-            sortName = "DESC";
-        }
-
-        String queryToDb = "SELECT * FROM employeetable ORDER BY " + sortField + " " + sortName;
-
-        List<Employee> list = e.getAllEmployees(queryToDb, pageSize, first);
-        this.setRowCount(list.size());
-
-
-
-        //    rowCount
-//        int dataSize = list.size();
-//        this.setRowCount(dataSize);
-
-
-        return list;
+        this.setRowCount(e.getTotalNumberOfEmployees());
+        return e.getSelectedEmployees(first, pageSize, sortField, sortOrder);
 
     }
 }

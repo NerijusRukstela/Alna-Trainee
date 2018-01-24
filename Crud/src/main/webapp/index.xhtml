@@ -7,7 +7,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
-     >
+>
 
 
 <h:head>
@@ -19,22 +19,23 @@
 
 
     <p:commandButton value="Add" styleClass="ui-priority-primary" action="#{employees.opendialog}"
-                     oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog" >
+                     oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog">
         <p:ajax listener="#{employees.opendialog}"/>
 
 
     </p:commandButton>
 
     <h:panelGroup id="wrapper">
-        <p:dataTable id="employeeTable" var="employee" value="#{employees.lazyModel}" lazy="true" paginator="true" rows="5"
+        <p:dataTable id="employeeTable" var="employee" value="#{employees.lazyModel}" lazy="true" paginator="true"
+                     rows="5"
                      paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
-                      {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5">
+                      {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15">
             <!--<p:ajax event="sort" listener="#{employees.onSort}"/>-->
             <p:column headerText="#{msg['message.id']}" sortBy="#{employee.id}" id="ID">
 
                 <h:outputText value="#{employee.id}"/>
             </p:column>
-            <p:column headerText="#{msg['message.name']}" sortBy="#{employee.name}" id="NAME"  >
+            <p:column headerText="#{msg['message.name']}" sortBy="#{employee.name}" id="NAME">
 
                 <h:outputText value="#{employee.name}"/>
             </p:column>
@@ -46,7 +47,7 @@
                 <h:outputText value="#{employee.department}"/>
             </p:column>
             <p:column headerText="#{msg['message.edit']}">
-                              <p:commandButton value="Edit" action="#{employees.editEmployeeRecord(employee.id)}"
+                <p:commandButton value="Edit" action="#{employees.editEmployeeRecord(employee.id)}"
                                  oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog">
                 </p:commandButton>
 

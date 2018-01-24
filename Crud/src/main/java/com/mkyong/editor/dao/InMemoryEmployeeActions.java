@@ -1,6 +1,7 @@
 package com.mkyong.editor.dao;
 
 import com.mkyong.editor.domain.Employee;
+import org.primefaces.model.SortOrder;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -49,7 +50,7 @@ public class InMemoryEmployeeActions implements EmployeeActions {
     }
 
     @Override
-    public List<Employee> getAllEmployees(String query, int pageSize, int first) {
+    public List<Employee> getAllEmployees() {
         return list;
     }
 
@@ -62,6 +63,17 @@ public class InMemoryEmployeeActions implements EmployeeActions {
             index++;
         }
         return index;
+    }
+    @Override
+    public int getTotalNumberOfEmployees () {
+
+        return Integer.parseInt(null);
+
+
+    }
+    @Override
+    public List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder){
+        return null;
     }
 
 }

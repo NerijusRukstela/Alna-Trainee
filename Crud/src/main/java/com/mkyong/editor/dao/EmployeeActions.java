@@ -1,12 +1,14 @@
 package com.mkyong.editor.dao;
 
 import com.mkyong.editor.domain.Employee;
+import org.primefaces.model.SortOrder;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface EmployeeActions {
 
-    List<Employee> getAllEmployees(String query, int pageSize, int first);
+    List<Employee> getAllEmployees() throws IOException;
 
     void addNewEmployee(Employee newEmployeeObj);
 
@@ -16,7 +18,8 @@ public interface EmployeeActions {
 
     Employee editEmployeeRecords(long employeeId);
 
-//    List<Employee> retrieveUsers(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters);
-//
-//    int countUsers(Map<String, Object> filters);
+    int getTotalNumberOfEmployees();
+
+    List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder);
+
 }
