@@ -3,12 +3,11 @@ package com.mkyong.editor.dao;
 import com.mkyong.editor.domain.Employee;
 import org.primefaces.model.SortOrder;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface EmployeeActions {
 
-    List<Employee> getAllEmployees() throws IOException;
+    List<Employee> getAllEmployees();
 
     void addNewEmployee(Employee newEmployeeObj);
 

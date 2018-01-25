@@ -8,13 +8,11 @@ import org.primefaces.model.LazyDataModel;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 
 @ManagedBean(name = "employees")
-@RequestScoped
-
+@SessionScoped
 public class EmployeesBean implements Serializable {
 
     private long id;
@@ -27,17 +25,14 @@ public class EmployeesBean implements Serializable {
     private boolean positionError = false;
     private boolean departmentError = false;
 
-    @ManagedProperty("#{employeeService}")
     private EmployeeActions employeeActions;
 
     private LazyDataModel<Employee> lazyModel;
 
     @PostConstruct
     public void init() {
-
+        employeeActions = new InDbEmployeeActions();
         lazyModel = new LazyModelHolder(employeeActions);
-
-        //lazyModel.setRowCount(10);
     }
 
 
