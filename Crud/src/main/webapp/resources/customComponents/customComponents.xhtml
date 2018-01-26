@@ -18,57 +18,69 @@
     <composite:attribute name="positionErrorRender"/>
     <composite:attribute name="departmentValue"/>
     <composite:attribute name="departmentErrorRender"/>
+    <composite:attribute name="dataValue"/>
+    <composite:attribute name="dataErrorRender"/>
     <composite:attribute name="addButton"
-                         method-signature = "java.lang.String index()"
-                   />
+                         method-signature="java.lang.String index()"
+    />
     <composite:attribute name="saveButton"
-                         method-signature = "java.lang.String index()"
-                    />
+                         method-signature="java.lang.String index()"
+    />
     <composite:attribute name="calcel"
-                         method-signature = "java.lang.String index()"
-                    />
+                         method-signature="java.lang.String index()"
+    />
 </composite:interface>
 <composite:implementation>
 
     <h:form id="employeeForm">
-    <h:panelGrid id="popup" columns="1" cellpadding="5">
+        <h:panelGrid id="popup" columns="1" cellpadding="5">
 
-    <h:outputText value="#{msg['message.nameEditCreate']}"/>
-    <h:inputText id="name" value="#{cc.attrs.nameValue}"/>
-    <h:outputText value="Please enter Name" rendered="#{cc.attrs.nameErrorRender}" for="name"
-                  style="color: red"/>
+            <h:outputText value="#{msg['message.nameEditCreate']}"/>
+            <p:inputText id="name" value="#{cc.attrs.nameValue}"/>
+            <h:outputText value="Please enter Name" rendered="#{cc.attrs.nameErrorRender}" for="name"
+                          style="color: red"/>
 
-    <h:outputText value="#{msg['message.positionEditCreate']}"/>
-    <h:inputText id="position" value="#{cc.attrs.positionValue}"/>
-    <h:outputText value="Please enter Position" rendered="#{cc.attrs.positionErrorRender}" for="position"
-                  style="color: red;"/>
-
-
-    <h:outputText value="#{msg['message.departmentEditCreate']}"/>
-    <h:inputText id="department" value="#{cc.attrs.departmentValue}"/>
-    <h:outputText value="Please enter Department" rendered="#{cc.attrs.departmentErrorRender}"
-                  for="department"
-                  style="color: red;"/>
+            <h:outputText value="#{msg['message.positionEditCreate']}"/>
+            <p:inputText id="position" value="#{cc.attrs.positionValue}" />
+            <h:outputText value="Please enter Position" rendered="#{cc.attrs.positionErrorRender}" for="position"
+                          style="color: red;" />
 
 
+            <h:outputText value="#{msg['message.departmentEditCreate']}"/>
+            <p:inputText id="department" value="#{cc.attrs.departmentValue}"/>
+            <h:outputText value="Please enter Department" rendered="#{cc.attrs.departmentErrorRender}"
+                          for="department"
+                          style="color: red;"/>
 
-    <p:commandButton value="Add" action="#{cc.attrs.addButton}" rendered="#{employees.add}"
-                     update="popup employeeTable" styleClass="ui-priority-primary"
-                     oncomplete="handleLoginRequestAdd(xhr, status, args)">
-    </p:commandButton>
 
 
-    <p:commandButton value="save" action="#{cc.attrs.saveButton}" update="popup employeeTable"
-                     rendered="#{employees.save}" styleClass="ui-priority-primary"
-                     oncomplete="handleLoginRequestEdit(xhr, status, args)">
-    </p:commandButton>
+            <!--<h:inputText id="data" value="#{cc.attrs.dataValue}"/>-->
+            <h:outputText value="#{msg['message.dataEditCreate']}" />
+            <p:calendar id="data" value="#{cc.attrs.dataValue}" />
+            <h:outputText value="Please enter Data" rendered="#{cc.attrs.dataErrorRender}"
+                          for="data"
+                          style="color: red;"/>
 
-    <p:commandButton value="View Employees Record List"
-                     action="#{cc.attrs.calcel}" onclick="PF('dlg').hide()">
 
-    </p:commandButton>
 
-    </h:panelGrid>
+
+            <p:commandButton value="Add" action="#{cc.attrs.addButton}" rendered="#{employees.add}"
+                             update="popup employeeTable" styleClass="ui-priority-primary"
+                             oncomplete="handleLoginRequestAdd(xhr, status, args)">
+            </p:commandButton>
+
+
+            <p:commandButton value="save" action="#{cc.attrs.saveButton}" update="popup employeeTable"
+                             rendered="#{employees.save}" styleClass="ui-priority-primary"
+                             oncomplete="handleLoginRequestEdit(xhr, status, args)">
+            </p:commandButton>
+
+            <p:commandButton value="View Employees Record List"
+                             action="#{cc.attrs.calcel}" onclick="PF('dlg').hide()">
+
+            </p:commandButton>
+
+        </h:panelGrid>
     </h:form>
 </composite:implementation>
 

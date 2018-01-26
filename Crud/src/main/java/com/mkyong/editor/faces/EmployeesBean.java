@@ -10,6 +10,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.Date;
 
 @ManagedBean(name = "employees")
 @SessionScoped
@@ -19,15 +21,21 @@ public class EmployeesBean implements Serializable {
     private String department;
     private String name;
     private String position;
+    private Date date;
     private boolean save = false;
     private boolean add = false;
     private boolean nameError = false;
     private boolean positionError = false;
     private boolean departmentError = false;
-
+    private boolean dateError = false;
     private EmployeeActions employeeActions;
-
     private LazyDataModel<Employee> lazyModel;
+
+
+
+
+
+
 
     @PostConstruct
     public void init() {
@@ -56,6 +64,8 @@ public class EmployeesBean implements Serializable {
         nameError = false;
         positionError = false;
         departmentError = false;
+        dateError = false;
+
         changeTrueAddButton();
         changeFalseSaveButton();
         RequestContext.getCurrentInstance().
@@ -85,6 +95,7 @@ public class EmployeesBean implements Serializable {
         this.name = null;
         this.position = null;
         this.department = null;
+        this.date = null;
         return null;
     }
 
@@ -97,8 +108,13 @@ public class EmployeesBean implements Serializable {
         return null;
     }
 
-    public boolean addEmployee() {
-//        employeeActions = new InDbEmployeeActions();
+
+
+
+    public boolean addEmployee() throws ParseException {
+
+
+
         boolean success;
         int departmentLength = this.department.length();
         if (departmentLength == 0) {
@@ -118,14 +134,22 @@ public class EmployeesBean implements Serializable {
         } else {
             positionError = false;
         }
-        if (departmentLength > 0 && nameLength > 0 && positionLength > 0) {
+        String dateString = String.valueOf(this.date);
+        int dateLength = dateString.length();
+        if (dateLength == 4) {
+            dateError = true;
+        } else {
+            dateError = false;
+        }
+        if (departmentLength > 0 && nameLength > 0 && positionLength > 0 && dateLength > 4) {
             success = true;
-            Employee employee = new Employee(this.name, this.position, this.department);
+            Employee employee = new Employee(this.name, this.position, this.department, this.date);
             employeeActions.addNewEmployee(employee);
 //            getEmployeesList();
         } else {
             success = false;
         }
+
         RequestContext.getCurrentInstance().
                 addCallbackParam("notValid", success);
 
@@ -134,22 +158,24 @@ public class EmployeesBean implements Serializable {
     }
 
     public String editEmployeeRecord(long employeeId) {
-        employeeActions = new InDbEmployeeActions();
+
         opendialogFromEdit();
         nameError = false;
         positionError = false;
         departmentError = false;
+        dateError = false;
         Employee employee = employeeActions.editEmployeeRecords(employeeId);
         this.name = employee.getName();
         this.position = employee.getPosition();
         this.department = employee.getDepartment();
         this.id = employee.getId();
+        this.date = employee.getDate();
 
         return null;
     }
 
     public String updateEmployeeDetails() {
-        employeeActions = new InDbEmployeeActions();
+
         boolean success;
         int departmentLength = this.department.length();
         if (departmentLength == 0) {
@@ -169,9 +195,17 @@ public class EmployeesBean implements Serializable {
         } else {
             positionError = false;
         }
+        String dateString = String.valueOf(this.date);
+        int dateLength = dateString.length();
+        if (dateLength == 4) {
+            dateError = true;
+        } else {
+            dateError = false;
+        }
+
         // & Bitwise operator - tikrina visas dalygas            && logical operator - jeigu pirmas neteisingas nebetikrina kitu
-        if (departmentLength > 0 && nameLength > 0 && positionLength > 0) {
-            Employee employee = new Employee(this.name, this.position, this.department, this.id);
+        if (departmentLength > 0 && nameLength > 0 && positionLength > 0 && dateLength > 4) {
+            Employee employee = new Employee(this.name, this.position, this.department, this.id, this.date);
             employeeActions.updateEmployeeRecords(employee);
             success = true;
         } else {
@@ -184,11 +218,10 @@ public class EmployeesBean implements Serializable {
     }
 
 
-    public String deleteEmployeeRecord(int employeeId) {
+    public void deleteEmployeeRecord(int employeeId) {
 
         employeeActions.deleteEmployeeRecords(employeeId);
-//        getEmployeesList();
-        return null;
+
     }
 
     //S and G
@@ -263,6 +296,22 @@ public class EmployeesBean implements Serializable {
 
     public void setDepartmentError(boolean departmentError) {
         this.departmentError = departmentError;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public boolean isDateError() {
+        return dateError;
+    }
+
+    public void setDateError(boolean dateError) {
+        this.dateError = dateError;
     }
 
     public EmployeeActions getEmployeeActions() {

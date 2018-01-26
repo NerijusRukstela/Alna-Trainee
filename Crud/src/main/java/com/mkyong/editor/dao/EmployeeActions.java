@@ -3,13 +3,14 @@ package com.mkyong.editor.dao;
 import com.mkyong.editor.domain.Employee;
 import org.primefaces.model.SortOrder;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface EmployeeActions {
 
     List<Employee> getAllEmployees();
 
-    void addNewEmployee(Employee newEmployeeObj);
+    void addNewEmployee(Employee newEmployeeObj) throws ParseException;
 
     void updateEmployeeRecords(Employee updateEmployee);
 

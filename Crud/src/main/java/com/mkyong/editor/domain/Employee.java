@@ -2,6 +2,7 @@ package com.mkyong.editor.domain;
 
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Employee implements Serializable {
     private String department;
@@ -9,20 +10,23 @@ public class Employee implements Serializable {
     private String position;
     private long id;
     private String sort;
+    private Date date;
 
-    public Employee(String name, String position, String department) {
+    public Employee(String name, String position, String department, Date date) {
 
         this.name = name;
         this.department = department;
         this.position = position;
+        this.date = date;
     }
 
-    public Employee(String name, String position, String department, long id) {
+    public Employee(String name, String position, String department, long id, Date date) {
 
         this.name = name;
         this.department = department;
         this.position = position;
         this.id = id;
+        this.date = date;
     }
 
     public Employee(String sort) {
@@ -66,5 +70,13 @@ public class Employee implements Serializable {
 
     public String getSort() {
         return sort;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

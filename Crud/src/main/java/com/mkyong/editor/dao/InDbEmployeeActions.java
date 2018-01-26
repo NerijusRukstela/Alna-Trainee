@@ -7,10 +7,10 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class InDbEmployeeActions implements EmployeeActions {
     public InDbEmployeeActions() {
         try {
             Context initCtx = new InitialContext();
-            this.dataSource = (DataSource) initCtx.lookup("java:/comp/env/jdbc/DatabaseName");
+            this.dataSource = (DataSource) initCtx.lookup("java:/comp/env/jdbc/EmployeesDB");
         } catch (NamingException e) {
             e.printStackTrace();
         }
@@ -67,13 +67,17 @@ public class InDbEmployeeActions implements EmployeeActions {
     }
 
     @Override
-    public void addNewEmployee(Employee newEmployee) {
+    public void addNewEmployee(Employee newEmployee) throws ParseException {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String date = df.format(newEmployee.getDate());
+
         try (Connection con = getConnection();
-             PreparedStatement pstmt = con.prepareStatement("INSERT INTO employeetable (Name, Position, Department) VALUES (?, ?, ?)")) {
+             PreparedStatement pstmt = con.prepareStatement("INSERT INTO employeetable (Name, Position, Department, Date) VALUES (?, ?, ?, ?)")) {
 
             pstmt.setString(1, newEmployee.getName());
             pstmt.setString(2, newEmployee.getPosition());
             pstmt.setString(3, newEmployee.getDepartment());
+            pstmt.setDate(4, java.sql.Date.valueOf(date));
             pstmt.executeUpdate();
 
         } catch (Exception sqlException) {
@@ -83,14 +87,18 @@ public class InDbEmployeeActions implements EmployeeActions {
 
     @Override
     public void updateEmployeeRecords(Employee updateEmployee) {
-
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String date = df.format(updateEmployee.getDate());
         try (Connection con = getConnection();
-             PreparedStatement pstmt = con.prepareStatement("UPDATE employeetable SET Name=?, Position=?, Department=? WHERE id=?")) {
+             PreparedStatement pstmt = con.prepareStatement("UPDATE employeetable SET Name=?, Position=?, Department=?, Date=? WHERE id=?")) {
 
             pstmt.setString(1, updateEmployee.getName());
             pstmt.setString(2, updateEmployee.getPosition());
             pstmt.setString(3, updateEmployee.getDepartment());
-            pstmt.setLong(4, updateEmployee.getId());
+            pstmt.setDate(4, java.sql.Date.valueOf(date));
+            pstmt.setLong(5, updateEmployee.getId());
+
+
             pstmt.executeUpdate();
 
         } catch (Exception sqlException) {
@@ -129,6 +137,7 @@ public class InDbEmployeeActions implements EmployeeActions {
                 emp.setName(rs.getString("Name"));
                 emp.setPosition(rs.getString("Position"));
                 emp.setDepartment(rs.getString("Department"));
+
                 employeeList.add(emp);
             }
             System.out.println("Total Records Fetched: " + employeeList.size());
@@ -168,6 +177,11 @@ public class InDbEmployeeActions implements EmployeeActions {
                 emp.setName(rs.getString("Name"));
                 emp.setPosition(rs.getString("Position"));
                 emp.setDepartment(rs.getString("Department"));
+                emp.setDate(rs.getDate("Date"));
+
+
+
+
                 employeeList.add(emp);
             }
             System.out.println("Total Records Fetched: " + employeeList.size());
@@ -192,6 +206,7 @@ public class InDbEmployeeActions implements EmployeeActions {
                 editRecord.setName(rs.getString("Name"));
                 editRecord.setPosition(rs.getString("Position"));
                 editRecord.setDepartment(rs.getString("Department"));
+                editRecord.setDate(rs.getDate("Date"));
             }
 
             return editRecord;
