@@ -24,17 +24,8 @@ public class EmployeesBean implements Serializable {
     private Date date;
     private boolean save = false;
     private boolean add = false;
-    private boolean nameError = false;
-    private boolean positionError = false;
-    private boolean departmentError = false;
-    private boolean dateError = false;
     private EmployeeActions employeeActions;
     private LazyDataModel<Employee> lazyModel;
-
-
-
-
-
 
 
     @PostConstruct
@@ -60,11 +51,8 @@ public class EmployeesBean implements Serializable {
     }
 
     public void opendialog() {
+
         clear();
-        nameError = false;
-        positionError = false;
-        departmentError = false;
-        dateError = false;
 
         changeTrueAddButton();
         changeFalseSaveButton();
@@ -103,6 +91,7 @@ public class EmployeesBean implements Serializable {
         this.name = null;
         this.position = null;
         this.department = null;
+        this.date = null;
         RequestContext.getCurrentInstance().
                 addCallbackParam("notValid9", true);
         return null;
@@ -114,33 +103,14 @@ public class EmployeesBean implements Serializable {
     public boolean addEmployee() throws ParseException {
 
 
-
         boolean success;
-        int departmentLength = this.department.length();
-        if (departmentLength == 0) {
-            departmentError = true;
-        } else {
-            departmentError = false;
-        }
+
         int nameLength = this.name.length();
-        if (nameLength == 0) {
-            nameError = true;
-        } else {
-            nameError = false;
-        }
         int positionLength = this.position.length();
-        if (positionLength == 0) {
-            positionError = true;
-        } else {
-            positionError = false;
-        }
+        int departmentLength = this.department.length();
         String dateString = String.valueOf(this.date);
         int dateLength = dateString.length();
-        if (dateLength == 4) {
-            dateError = true;
-        } else {
-            dateError = false;
-        }
+
         if (departmentLength > 0 && nameLength > 0 && positionLength > 0 && dateLength > 4) {
             success = true;
             Employee employee = new Employee(this.name, this.position, this.department, this.date);
@@ -160,10 +130,6 @@ public class EmployeesBean implements Serializable {
     public String editEmployeeRecord(long employeeId) {
 
         opendialogFromEdit();
-        nameError = false;
-        positionError = false;
-        departmentError = false;
-        dateError = false;
         Employee employee = employeeActions.editEmployeeRecords(employeeId);
         this.name = employee.getName();
         this.position = employee.getPosition();
@@ -178,30 +144,10 @@ public class EmployeesBean implements Serializable {
 
         boolean success;
         int departmentLength = this.department.length();
-        if (departmentLength == 0) {
-            departmentError = true;
-        } else {
-            departmentError = false;
-        }
         int nameLength = this.name.length();
-        if (nameLength == 0) {
-            nameError = true;
-        } else {
-            nameError = false;
-        }
         int positionLength = this.position.length();
-        if (positionLength == 0) {
-            positionError = true;
-        } else {
-            positionError = false;
-        }
         String dateString = String.valueOf(this.date);
         int dateLength = dateString.length();
-        if (dateLength == 4) {
-            dateError = true;
-        } else {
-            dateError = false;
-        }
 
         // & Bitwise operator - tikrina visas dalygas            && logical operator - jeigu pirmas neteisingas nebetikrina kitu
         if (departmentLength > 0 && nameLength > 0 && positionLength > 0 && dateLength > 4) {
@@ -274,29 +220,6 @@ public class EmployeesBean implements Serializable {
         this.save = save;
     }
 
-    public boolean isNameError() {
-        return nameError;
-    }
-
-    public void setNameError(boolean nameError) {
-        this.nameError = nameError;
-    }
-
-    public boolean isPositionError() {
-        return positionError;
-    }
-
-    public void setPositionError(boolean positionError) {
-        this.positionError = positionError;
-    }
-
-    public boolean isDepartmentError() {
-        return departmentError;
-    }
-
-    public void setDepartmentError(boolean departmentError) {
-        this.departmentError = departmentError;
-    }
 
     public Date getDate() {
         return date;
@@ -306,13 +229,6 @@ public class EmployeesBean implements Serializable {
         this.date = date;
     }
 
-    public boolean isDateError() {
-        return dateError;
-    }
-
-    public void setDateError(boolean dateError) {
-        this.dateError = dateError;
-    }
 
     public EmployeeActions getEmployeeActions() {
         return employeeActions;

@@ -3,28 +3,19 @@ package com.mkyong.editor.dao;
 import com.mkyong.editor.domain.Employee;
 import org.primefaces.model.SortOrder;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.*;
-
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class InDbEmployeeActions implements EmployeeActions {
 
 
     private DataSource dataSource;
-
 
 
 //    public InDbEmployeeActions() {
@@ -48,8 +39,6 @@ public class InDbEmployeeActions implements EmployeeActions {
 //    }
 
     private Connection conn;
-
-
 
 
     private Connection getConnection() {
@@ -93,6 +82,8 @@ public class InDbEmployeeActions implements EmployeeActions {
             pstmt.setString(2, newEmployee.getPosition());
             pstmt.setString(3, newEmployee.getDepartment());
             pstmt.setDate(4, java.sql.Date.valueOf(date));
+
+
             pstmt.executeUpdate();
 
         } catch (Exception sqlException) {
@@ -166,21 +157,20 @@ public class InDbEmployeeActions implements EmployeeActions {
 
     }
 
-    @Override
-    public List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder) {
-//             if (sortField == ("name")) {
-//            String sortName = "ASC";
-//            if (sortOrder.name().equals("ASCENDING")) {
-//                sortName = "ASC";
-//            } else if (sortOrder.name().equals("DESCENDING")) {
-//                sortName = "DESC";
-//            }
-//
 
-//    }
+    @Override
+    public List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+        String query;
+        String sortName = "ASC";
+        if (sortOrder.name().equals("ASCENDING")) {
+            sortName = "ASC";
+        } else if (sortOrder.name().equals("DESCENDING")) {
+            sortName = "DESC";
+        }
+
+        query = String.format("SELECT * FROM employeetable ORDER BY %1s %2s Limit %3s, %4s" , sortField, sortName, first, first + pageSize);
+   //   query = "SELECT * FROM employeetable WHERE ID = filters";
         List<Employee> employeeList = new ArrayList<>();
-        //    String query = String.format("SELECT * FROM employeetable ORDER BY %1s %2s", sortField, sortName);
-        String query = String.format("SELECT * FROM employeetable LIMIT %1s, %2s", first, first + pageSize);
 
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(query)) {
@@ -193,8 +183,6 @@ public class InDbEmployeeActions implements EmployeeActions {
                 emp.setPosition(rs.getString("Position"));
                 emp.setDepartment(rs.getString("Department"));
                 emp.setDate(rs.getDate("Date"));
-
-
 
 
                 employeeList.add(emp);

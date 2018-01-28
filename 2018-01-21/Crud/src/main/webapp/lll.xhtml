@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+
+
+<h:head>
+    <title>Title123</title>
+</h:head>
+
+<h:body>
+    <h1> Employees List </h1>
+
+
+
+    <p:commandButton value="Add" styleClass="ui-priority-primary" action="#{employees.opendialog}"
+                     oncomplete="handleLoginRequest1(xhr, status, args)" >
+        <p:ajax listener="#{employees.opendialog}" />
+
+
+    </p:commandButton>
+
+
+    <h:panelGroup id="wrapper">
+        <p:dataTable id="employeeTable" var="employee" binding="#{table}" value="#{employees.getList()}">
+            <p:column sortBy="#{employees.id}">
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.id']}"/>
+                </f:facet>
+                <h:outputText value="#{employee.id}"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.name']}"/>
+                </f:facet>
+                <h:outputText value="#{employee.name}"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.position']}"/>
+                </f:facet>
+                <h:outputText value="#{employee.position}"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.department']}"/>
+                </f:facet>
+                <h:outputText value="#{employee.department}"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.edit']}"/>
+                </f:facet>
+
+
+                <p:commandButton value="Edit" action="#{employees.editEmployeeRecord(employee.id)}"
+                                 oncomplete="handleLoginRequest1(xhr, status, args)"
+                >
+                    <p:ajax listener="#{employees.editEmployeeRecord(employee.id)}" />
+                    <f:ajax render=":employeeForm:dialog"/>
+                </p:commandButton>
+
+
+            </p:column>
+            <p:column>
+
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.delete']}"/>
+                </f:facet>
+
+                <p:commandButton id="remove" value="Delete" update="employeeTable" style="margin-right:20px;"
+                                 oncomplete="handleLoginRequestdele(xhr, status, args)"  >
+                    <p:ajax listener="#{employees.deleteEmployeeRecord(employee.id)}" />
+                </p:commandButton>
+
+
+            </p:column>
+
+
+        </p:dataTable>
+    </h:panelGroup>
+    <!--Add section-->
+    <h:form id="employeeForm">
+        <p:dialog header="Dynamic Focus" widgetVar="dlg" modal="true" closable="false" closeOnEscape="true" id="dialog">
+
+            <h:panelGrid id="popup" columns="3" cellpadding="5">
+                <h:outputText value="#{msg['message.nameEditCreate']}"/>
+                <h:inputText id="name" value="#{employees.name}" required="true" requiredMessage="Please enter Name">
+                </h:inputText>
+                <h:message for="name"   style="color: red"/>
+
+
+                <h:outputText value="#{msg['message.positionEditCreate']}"/>
+                <h:inputText id="position" value="#{employees.position}" required="true"
+                             requiredMessage="Please enter Position" >
+
+                </h:inputText>
+                <h:message for="position" id="positionError"  style="color: red;"/>
+
+
+                <h:outputText value="#{msg['message.departmentEditCreate']}"/>
+                <h:inputText id="department" value="#{employees.department}" required="true"
+                             requiredMessage="Please enter Department">
+                </h:inputText>
+                <h:message for="department"  style="color: red;"/>
+
+
+                <p:commandButton value="Add" action="#{employees.addEmployee}" rendered="#{employees.add}"
+                                 update="employeeTable" styleClass="ui-priority-primary"
+                                 oncomplete="handleLoginRequestAdd(xhr, status, args)" validateClient="true">
+                    <p:ajax execute="employeeForm" render="employeeForm:employeeTable" />
+                </p:commandButton>
+                <!-- update popup  -->
+                <p:commandButton value="save" id="saveButton"
+                                 action="#{employees.updateEmployeeDetails()}" update="employeeTable" rendered="#{employees.save}"
+                                 styleClass="ui-priority-primary" oncomplete="handleLoginRequestEdit(xhr, status, args)">
+                    <p:ajax  execute="employeeForm" render="employeeForm:employeeTable" update="popup"/>
+                </p:commandButton>
+
+                <p:commandButton value="View Employees Record List" action="#{employees.exitAndClear()}" update="dialog" oncomplete="handleLoginRequestExitAndClear(xhr, status, args)">
+
+                </p:commandButton>
+                <script type="text/javascript">
+                    function handleLoginRequestAdd(xhr, status, args) {
+                        if (!args.notValid) {
+                            PF('dlg').jq.effect("shake", {times: 5}, 100);
+                        }
+                        else {
+                            PF('dlg').hide();
+                        }
+                    }
+                </script>
+                <script type="text/javascript">
+                    function handleLoginRequestEdit(xhr, status, args) {
+                        if (!args.notValid) {
+                            PF('dlg').jq.effect("shake", {times: 5}, 100);
+                        }
+                        else {
+                            PF('dlg').hide();
+                        }
+                    }
+                </script>
+
+            </h:panelGrid>
+        </p:dialog>
+
+
+        <!--Edit section-->
+
+
+    </h:form>
+
+    <script type="text/javascript">
+        function handleLoginRequest1(xhr, status, args) {
+            PF('dlg').show();
+        }
+    </script>
+    <script type="text/javascript">
+        function handleLoginRequestExitAndClear(xhr, status, args) {
+            PF('dlg').hide();
+        }
+    </script>
+    <script type="text/javascript">
+        function handleLoginRequestdele(xhr, status, args) {
+
+            PF('dlg').hide();
+        }
+    </script>
+
+
+</h:body>
+
+</html>

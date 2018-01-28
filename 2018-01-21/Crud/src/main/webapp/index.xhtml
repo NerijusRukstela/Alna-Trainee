@@ -18,40 +18,43 @@
     <h1> Employees List </h1>
 
 
-    <p:commandButton value="Add" styleClass="ui-priority-primary" action="#{employees.opendialog}"
-                     oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog">
-        <p:ajax listener="#{employees.opendialog}"/>
+
+
+    <p:commandButton value="Add" styleClass="ui-priority-primary"
+                     process="@this" oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog" resetValues="true">
+        <p:ajax listener="#{employees.opendialog}" />
 
 
     </p:commandButton>
 
     <h:panelGroup id="wrapper">
         <p:dataTable id="employeeTable" var="employee" value="#{employees.lazyModel}" lazy="true" paginator="true"
-                     rows="2"
+                     rows="5"
                      paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
                       {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15">
             <!--<p:ajax event="sort" listener="#{employees.onSort}"/>-->
-            <p:column headerText="#{msg['message.id']}" sortBy="#{employee.id}" id="ID">
+            <p:column headerText="#{msg['message.id']}" filterBy="#{employee.id}" sortBy="#{employee.id}" id="ID">
 
                 <h:outputText value="#{employee.id}"/>
             </p:column>
-            <p:column headerText="#{msg['message.name']}" sortBy="#{employee.name}" id="NAME">
+            <p:column headerText="#{msg['message.name']}" filterBy="#{employee.name}" sortBy="#{employee.name}" id="NAME">
 
                 <h:outputText value="#{employee.name}"/>
             </p:column>
-            <p:column headerText="#{msg['message.position']}" sortBy="#{employee.position}" id="POSITION">
+            <p:column headerText="#{msg['message.position']}" filterBy="#{employee.position}" sortBy="#{employee.position}" id="POSITION">
 
                 <h:outputText value="#{employee.position}"/>
             </p:column>
-            <p:column headerText="#{msg['message.department']}" sortBy="#{employee.department}" id="DEPARTMENT">
+            <p:column headerText="#{msg['message.department']}" filterBy="#{employee.department}" sortBy="#{employee.department}" id="DEPARTMENT">
                 <h:outputText value="#{employee.department}"/>
             </p:column>
-            <p:column headerText="#{msg['message.data']}" sortBy="#{employee.date}"  id="CALENDAR">
+            <p:column headerText="#{msg['message.data']}" filterBy="#{employee.date}" sortBy="#{employee.date}"  id="CALENDAR">
                 <h:outputText value="#{employee.date}"/>
             </p:column>
             <p:column headerText="#{msg['message.edit']}">
                 <p:commandButton value="Edit" action="#{employees.editEmployeeRecord(employee.id)}"
-                                 oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog">
+                                 oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog" process="@this"
+                                 resetValues="true">
                 </p:commandButton>
 
 
@@ -59,8 +62,8 @@
             <p:column headerText="#{msg['message.delete']}">
 
                 <p:commandButton id="remove" value="Delete" update="employeeTable" style="margin-right:20px;"
-                                 action="#{employees.deleteEmployeeRecord(employee.id)}"
-                                 onclick="return confirm('Are you sure?')">
+                                 actionListener="#{employees.deleteEmployeeRecord(employee.id)}"
+                                 onclick="return confirm('Are you sure?')" process="@this">
                 </p:commandButton>
 
 
@@ -75,6 +78,7 @@
     <p:dialog header="Dynamic Focus" widgetVar="dlg" modal="true" closable="false" closeOnEscape="true" id="dialog">
         <components:customComponents
                 nameValue="#{employees.name}"
+
                 nameErrorRender="#{employees.nameError}"
                 positionValue="#{employees.position}"
                 positionErrorRender="#{employees.positionError}"
