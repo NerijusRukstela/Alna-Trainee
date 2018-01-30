@@ -5,10 +5,14 @@ import com.mkyong.editor.dao.InDbEmployeeActions;
 import com.mkyong.editor.domain.Employee;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
+import sun.security.validator.ValidatorException;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
@@ -24,17 +28,8 @@ public class EmployeesBean implements Serializable {
     private Date date;
     private boolean save = false;
     private boolean add = false;
-    private boolean nameError = false;
-    private boolean positionError = false;
-    private boolean departmentError = false;
-    private boolean dateError = false;
     private EmployeeActions employeeActions;
     private LazyDataModel<Employee> lazyModel;
-
-
-
-
-
 
 
     @PostConstruct
@@ -49,6 +44,13 @@ public class EmployeesBean implements Serializable {
         return lazyModel;
     }
 
+    public Date today() {
+        Date today = new Date();
+
+        return today;
+    }
+
+
     public String changeTrueAddButton() {
         add = true;
         return null;
@@ -60,11 +62,8 @@ public class EmployeesBean implements Serializable {
     }
 
     public void opendialog() {
+
         clear();
-        nameError = false;
-        positionError = false;
-        departmentError = false;
-        dateError = false;
 
         changeTrueAddButton();
         changeFalseSaveButton();
@@ -103,43 +102,41 @@ public class EmployeesBean implements Serializable {
         this.name = null;
         this.position = null;
         this.department = null;
+        this.date = null;
         RequestContext.getCurrentInstance().
                 addCallbackParam("notValid9", true);
         return null;
     }
 
 
+    public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+        Date today = new Date();
 
+        if (((Date) value).after(today)) {
+            context = FacesContext.getCurrentInstance();
+            context.addMessage(component.getClientId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Date does not exists"));
+        } else {
+
+            return;
+        }
+
+
+    }
 
     public boolean addEmployee() throws ParseException {
-
-
+        Date today = new Date();
 
         boolean success;
-        int departmentLength = this.department.length();
-        if (departmentLength == 0) {
-            departmentError = true;
-        } else {
-            departmentError = false;
-        }
+
         int nameLength = this.name.length();
-        if (nameLength == 0) {
-            nameError = true;
-        } else {
-            nameError = false;
-        }
         int positionLength = this.position.length();
-        if (positionLength == 0) {
-            positionError = true;
-        } else {
-            positionError = false;
-        }
-        String dateString = String.valueOf(this.date);
-        int dateLength = dateString.length();
-        if (dateLength == 4) {
-            dateError = true;
-        } else {
-            dateError = false;
+        int departmentLength = this.department.length();
+
+
+        int dateLength = 4;
+        if (this.date.before(today)) {
+            String dateString = String.valueOf(this.date);
+            dateLength = dateString.length();
         }
         if (departmentLength > 0 && nameLength > 0 && positionLength > 0 && dateLength > 4) {
             success = true;
@@ -160,10 +157,6 @@ public class EmployeesBean implements Serializable {
     public String editEmployeeRecord(long employeeId) {
 
         opendialogFromEdit();
-        nameError = false;
-        positionError = false;
-        departmentError = false;
-        dateError = false;
         Employee employee = employeeActions.editEmployeeRecords(employeeId);
         this.name = employee.getName();
         this.position = employee.getPosition();
@@ -175,34 +168,17 @@ public class EmployeesBean implements Serializable {
     }
 
     public String updateEmployeeDetails() {
-
+        Date today = new Date();
         boolean success;
         int departmentLength = this.department.length();
-        if (departmentLength == 0) {
-            departmentError = true;
-        } else {
-            departmentError = false;
-        }
         int nameLength = this.name.length();
-        if (nameLength == 0) {
-            nameError = true;
-        } else {
-            nameError = false;
-        }
         int positionLength = this.position.length();
-        if (positionLength == 0) {
-            positionError = true;
-        } else {
-            positionError = false;
-        }
-        String dateString = String.valueOf(this.date);
-        int dateLength = dateString.length();
-        if (dateLength == 4) {
-            dateError = true;
-        } else {
-            dateError = false;
-        }
 
+        int dateLength = 4;
+        if (this.date.before(today)) {
+            String dateString = String.valueOf(this.date);
+            dateLength = dateString.length();
+        }
         // & Bitwise operator - tikrina visas dalygas            && logical operator - jeigu pirmas neteisingas nebetikrina kitu
         if (departmentLength > 0 && nameLength > 0 && positionLength > 0 && dateLength > 4) {
             Employee employee = new Employee(this.name, this.position, this.department, this.id, this.date);
@@ -274,29 +250,6 @@ public class EmployeesBean implements Serializable {
         this.save = save;
     }
 
-    public boolean isNameError() {
-        return nameError;
-    }
-
-    public void setNameError(boolean nameError) {
-        this.nameError = nameError;
-    }
-
-    public boolean isPositionError() {
-        return positionError;
-    }
-
-    public void setPositionError(boolean positionError) {
-        this.positionError = positionError;
-    }
-
-    public boolean isDepartmentError() {
-        return departmentError;
-    }
-
-    public void setDepartmentError(boolean departmentError) {
-        this.departmentError = departmentError;
-    }
 
     public Date getDate() {
         return date;
@@ -306,13 +259,6 @@ public class EmployeesBean implements Serializable {
         this.date = date;
     }
 
-    public boolean isDateError() {
-        return dateError;
-    }
-
-    public void setDateError(boolean dateError) {
-        this.dateError = dateError;
-    }
 
     public EmployeeActions getEmployeeActions() {
         return employeeActions;

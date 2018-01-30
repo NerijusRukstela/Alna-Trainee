@@ -6,6 +6,7 @@ import org.primefaces.model.SortOrder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryEmployeeActions implements EmployeeActions {
     private List<Employee> list = new ArrayList<>();
@@ -72,7 +73,7 @@ public class InMemoryEmployeeActions implements EmployeeActions {
 
     }
     @Override
-    public List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder){
+    public List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters){
         return null;
     }
 

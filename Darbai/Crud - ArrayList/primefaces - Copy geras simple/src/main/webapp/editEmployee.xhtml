@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+<head>
+    <title>Title</title>
+</head>
+<f:metadata>
+    <f:viewParam id="id" name="id" value="#{employees.id}" required="true" />
+    <f:event listener="#{employees.showEditWindow}"
+             type="preRenderView"/>
+</f:metadata>
+
+<h:body>
+    <h1> Employee table </h1>
+    <h:form>
+        <div class="form-group">
+
+            <h:outputLabel class="control-label col-sm-4">
+                <h:outputText value="#{msg['message.nameEditCreate']}" />
+            </h:outputLabel>
+
+            <div class="col-sm-4">
+
+                <h:inputText id="name" value="#{employees.name}" class="form-control"
+                             requiredMessage="Please enter Name" required="true"/>
+                <h:message for="name" style="color: red;"/>
+            </div>
+
+        </div>
+        <div class="form-group">
+
+            <h:outputLabel class="control-label col-sm-4">
+                <h:outputText value="#{msg['message.positionEditCreate']}" />
+            </h:outputLabel>
+
+            <div class="col-sm-4">
+
+                <h:inputText id="position" value="#{employees.position}" class="form-control"
+                             requiredMessage="Please enter Position" required="true"/>
+                <h:message for="position" style="color: red;"/>
+            </div>
+
+        </div>
+        <div class="form-group">
+
+            <h:outputLabel class="control-label col-sm-4"><h:outputText value="#{msg['message.departmentEditCreate']}" /></h:outputLabel>
+
+            <div class="col-sm-4">
+
+                <h:inputText id="department" value="#{employees.department}" class="form-control"
+                             requiredMessage="Please enter Department" required="true"/>
+                <h:message for="department" style="color: red;"/>
+
+
+            </div>
+
+        </div>
+        <div class="form-group">
+
+            <div class="col-sm-4"></div>
+
+            <div class="col-sm-4">
+
+                <div class="col-sm-2">
+
+                    <h:commandButton value="Save" action="#{employees.editEmployeeRecords()}" />
+
+
+                </div>
+
+                <div class="col-sm-1">
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <h:commandButton action="#{employees.moveToIndex}" value="View Employees Record List"/>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </h:form>
+</h:body>
+
+</html>

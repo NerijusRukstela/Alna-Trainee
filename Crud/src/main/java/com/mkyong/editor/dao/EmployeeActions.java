@@ -5,6 +5,7 @@ import org.primefaces.model.SortOrder;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 public interface EmployeeActions {
 
@@ -20,6 +21,6 @@ public interface EmployeeActions {
 
     int getTotalNumberOfEmployees();
 
-    List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder);
+    List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters);
 
 }

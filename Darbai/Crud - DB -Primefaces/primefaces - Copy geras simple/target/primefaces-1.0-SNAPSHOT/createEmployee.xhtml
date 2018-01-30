@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Title</title>
+</h:head>
+<h:body>
+    <h1> Employee table </h1>
+    <h:form id="form">
+
+        <h:panelGrid columns="3" cellpadding="5">
+            <h:outputText value="#{msg['message.nameEditCreate']}"/>
+            <p:inputText id="name" value="#{employees.name}" requiredMessage="Please enter Name" required="true"/>
+            <h:message for="name" style="color: red;"/>
+
+            <h:outputText value="#{msg['message.positionEditCreate']}"/>
+            <p:inputText id="position" value="#{employees.position}" requiredMessage="Please enter Position"
+                         required="true"/>
+            <h:message for="position" style="color: red;"/>
+
+            <h:outputText value="#{msg['message.departmentEditCreate']}"/>
+            <p:inputText id="department" value="#{employees.department}" required="true"
+                         requiredMessage="Please enter Department">
+
+            </p:inputText>
+            <h:message for="department" style="color: red;"/>
+
+        </h:panelGrid>
+
+
+        <p:commandButton value="Add" action="#{employees.addEmployee()}" update="form">
+            <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert"/>
+        </p:commandButton>
+        <p:commandButton action="#{employees.moveToIndex}" immediate="true" value="View Employees Record List"/>
+
+
+        <p:confirmDialog global="true" rendered="true" closable="false">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes">
+
+            </p:commandButton>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+        </p:confirmDialog>
+    </h:form>
+
+</h:body>
+</html>

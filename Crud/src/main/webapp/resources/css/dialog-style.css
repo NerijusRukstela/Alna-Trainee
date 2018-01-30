@@ -1,0 +1,19 @@
+#name{
+    text-align: center;
+}
+#date{
+    text-align: center;
+    font-family: Calibri;
+}
+
+
+tr.ui-widget-content {
+    font-size: 30px;
+}
+
+
+.ui-datatable-tablewrapper td[role="gridcell"]{
+    font-size: 10px;
+}
+
+

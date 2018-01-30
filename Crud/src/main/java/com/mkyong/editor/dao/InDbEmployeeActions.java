@@ -7,18 +7,16 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.*;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class InDbEmployeeActions implements EmployeeActions {
 
@@ -27,43 +25,43 @@ public class InDbEmployeeActions implements EmployeeActions {
 
 
 
-//    public InDbEmployeeActions() {
-//        try {
-//            initCtx = new InitialContext();
-//            this.dataSource = (DataSource) initCtx.lookup("java:/comp/env/jdbc/LocalDatabaseName");
-//        } catch (NamingException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    public Connection getConnection() {
-//        try {
-//            conn = dataSource.getConnection();
-//            return conn;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public InDbEmployeeActions() {
+        try {
+            Context initCtx = new InitialContext();
+            this.dataSource = (DataSource) initCtx.lookup("java:/comp/env/jdbc/DatabaseName");
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public Connection getConnection() {
+        try {
+            conn = dataSource.getConnection();
+            return conn;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private Connection conn;
 
 
 
 
-    private Connection getConnection() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb?useSSL=false", "root", "root");
-            Statement stmtObj = conn.createStatement();
-
-        } catch (Exception sqlException) {
-            sqlException.printStackTrace();
-        }
-        return conn;
-
-    }
+//    private Connection getConnection() {
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb?useSSL=false", "root", "root");
+//            Statement stmtObj = conn.createStatement();
+//
+//        } catch (Exception sqlException) {
+//            sqlException.printStackTrace();
+//        }
+//        return conn;
+//
+//    }
 
 
     @Override
@@ -167,20 +165,17 @@ public class InDbEmployeeActions implements EmployeeActions {
     }
 
     @Override
-    public List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder) {
-//             if (sortField == ("name")) {
-//            String sortName = "ASC";
-//            if (sortOrder.name().equals("ASCENDING")) {
-//                sortName = "ASC";
-//            } else if (sortOrder.name().equals("DESCENDING")) {
-//                sortName = "DESC";
-//            }
-//
+    public List<Employee> getSelectedEmployees(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+        String query;
+        String sortName = "ASC";
+        if (sortOrder.name().equals("ASCENDING")) {
+            sortName = "ASC";
+        } else if (sortOrder.name().equals("DESCENDING")) {
+            sortName = "DESC";
+        }
 
-//    }
+        query = String.format("SELECT * FROM employeetable ORDER BY %1s %2s Limit %3s, %4s" , sortField, sortName, first, first + pageSize);
         List<Employee> employeeList = new ArrayList<>();
-        //    String query = String.format("SELECT * FROM employeetable ORDER BY %1s %2s", sortField, sortName);
-        String query = String.format("SELECT * FROM employeetable LIMIT %1s, %2s", first, first + pageSize);
 
         try (Connection con = getConnection();
              PreparedStatement pstmt = con.prepareStatement(query)) {
@@ -195,8 +190,6 @@ public class InDbEmployeeActions implements EmployeeActions {
                 emp.setDate(rs.getDate("Date"));
 
 
-
-
                 employeeList.add(emp);
             }
             System.out.println("Total Records Fetched: " + employeeList.size());
@@ -206,6 +199,7 @@ public class InDbEmployeeActions implements EmployeeActions {
         }
         return employeeList;
     }
+
 
 
     @Override

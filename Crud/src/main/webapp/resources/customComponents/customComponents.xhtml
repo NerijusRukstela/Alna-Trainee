@@ -9,6 +9,9 @@
       xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:tp="http://java.sun.com/jsp/jstl/functions" xmlns:com="http://java.sun.com/jstl/core"
 >
+<h:head>
+    <h:outputStylesheet name="dialog-style.css" library="css"/>
+</h:head>
 
 <composite:interface>
 
@@ -33,35 +36,43 @@
 <composite:implementation>
 
     <h:form id="employeeForm">
-        <h:panelGrid id="popup" columns="1" cellpadding="5">
-
-            <h:outputText value="#{msg['message.nameEditCreate']}"/>
-            <p:inputText id="name" value="#{cc.attrs.nameValue}"/>
-            <h:outputText value="Please enter Name" rendered="#{cc.attrs.nameErrorRender}" for="name"
-                          style="color: red"/>
-
-            <h:outputText value="#{msg['message.positionEditCreate']}"/>
-            <p:inputText id="position" value="#{cc.attrs.positionValue}" />
-            <h:outputText value="Please enter Position" rendered="#{cc.attrs.positionErrorRender}" for="position"
-                          style="color: red;" />
+        <h:panelGrid id="popup" columns="1" cellpadding="5" >
 
 
-            <h:outputText value="#{msg['message.departmentEditCreate']}"/>
-            <p:inputText id="department" value="#{cc.attrs.departmentValue}"/>
-            <h:outputText value="Please enter Department" rendered="#{cc.attrs.departmentErrorRender}"
-                          for="department"
-                          style="color: red;"/>
+                <p:outputLabel style="text-shadow: 1px 1px" value="#{msg['message.nameEditCreate']}"/>
+
+            <p:inputText id="name" value="#{cc.attrs.nameValue}" required="true"
+                         requiredMessage="Please enter Name" validatorMessage="The Name is too long">
+                <f:validateLength minimum="1" maximum="45"/>
+            </p:inputText>
+            <p:message for="name"/>
 
 
+            <p:outputLabel value="#{msg['message.positionEditCreate']}"/>
+            <p:inputText id="position" required="true" value="#{cc.attrs.positionValue}"
+                         requiredMessage="Please enter Position" validatorMessage="The Position title is too long">
+                <f:validateLength maximum="45"/>
+            </p:inputText>
+            <p:message for="position"/>
 
-            <!--<h:inputText id="data" value="#{cc.attrs.dataValue}"/>-->
-            <h:outputText value="#{msg['message.dataEditCreate']}" />
-            <p:calendar id="data" value="#{cc.attrs.dataValue}" />
-            <h:outputText value="Please enter Data" rendered="#{cc.attrs.dataErrorRender}"
-                          for="data"
-                          style="color: red;"/>
+            <p:outputLabel value="#{msg['message.departmentEditCreate']}"/>
+            <p:inputText id="department" value="#{cc.attrs.departmentValue}" rendered="true"
+                         requiredMessage="Please enter Department" validatorMessage="The Department title is too long"
+                         required="true">
+                <f:validateLength maximum="45"/>
+            </p:inputText>
+            <p:message for="department"/>
 
 
+            <p:outputLabel value="#{msg['message.dataEditCreate']}"/>
+            <p:calendar id="date" value="#{cc.attrs.dataValue}" pattern="yyyy-MM-dd" maxlength="10"
+                        maxdate="#{employees.today()}"
+                        requiredMessage="Please enter Date"
+                        converterMessage="could not be understood as a date. Example: 2018-01-30"
+                        required="true" validator="#{employees.validate}">
+            </p:calendar>
+
+            <p:message for="date"/>
 
 
             <p:commandButton value="Add" action="#{cc.attrs.addButton}" rendered="#{employees.add}"
@@ -75,13 +86,16 @@
                              oncomplete="handleLoginRequestEdit(xhr, status, args)">
             </p:commandButton>
 
-            <p:commandButton value="View Employees Record List"
-                             action="#{cc.attrs.calcel}" onclick="PF('dlg').hide()">
-
+            <p:commandButton value="View Employees Record List" action="#{employees.exitAndClear}"
+                             update="popup employeeTable" styleClass="ui-priority-primary"
+                             oncomplete="handleLoginRequestExitAndClear(xhr, status, args)">
             </p:commandButton>
+
 
         </h:panelGrid>
     </h:form>
+
+
 </composite:implementation>
 
 

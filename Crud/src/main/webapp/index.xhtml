@@ -11,33 +11,39 @@
 
 
 <h:head>
-    <title>Title123</title>
+    <h:outputStylesheet name="dialog-style.css" library="css"/>
+
+    <title>Crud</title>
 </h:head>
 
 <h:body>
-    <h1> Employees List </h1>
+    <div id="title">
+        <h1> Employees List </h1>
+    </div>
 
 
-    <p:commandButton value="Add" styleClass="ui-priority-primary" action="#{employees.opendialog}"
-                     oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog">
-        <p:ajax listener="#{employees.opendialog}"/>
-
-
-    </p:commandButton>
-
-    <h:panelGroup id="wrapper">
+    <div id="add">
+        <p:commandButton value="Add" styleClass="ui-priority-primary"
+                         process="@this" oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog"
+                         resetValues="true">
+            <p:ajax listener="#{employees.opendialog}"/>
+        </p:commandButton>
+    </div>
+    <h:panelGroup id="wrapper" style="padding: 10px 10px">
         <p:dataTable id="employeeTable" var="employee" value="#{employees.lazyModel}" lazy="true" paginator="true"
-                     rows="2"
+                     rows="5"
                      paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
-                      {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15">
+                      {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10">
             <!--<p:ajax event="sort" listener="#{employees.onSort}"/>-->
             <p:column headerText="#{msg['message.id']}" sortBy="#{employee.id}" id="ID">
 
                 <h:outputText value="#{employee.id}"/>
             </p:column>
-            <p:column headerText="#{msg['message.name']}" sortBy="#{employee.name}" id="NAME">
 
-                <h:outputText value="#{employee.name}"/>
+            <p:column headerText="#{msg['message.name']}" sortBy="#{employee.name}" id="NAME">
+                <div id="name">
+                    <h:outputText value="#{employee.name}"/>
+                </div>
             </p:column>
             <p:column headerText="#{msg['message.position']}" sortBy="#{employee.position}" id="POSITION">
 
@@ -46,12 +52,16 @@
             <p:column headerText="#{msg['message.department']}" sortBy="#{employee.department}" id="DEPARTMENT">
                 <h:outputText value="#{employee.department}"/>
             </p:column>
-            <p:column headerText="#{msg['message.data']}" sortBy="#{employee.date}"  id="CALENDAR">
-                <h:outputText value="#{employee.date}"/>
+            <p:column headerText="#{msg['message.data']}" sortBy="#{employee.date}" id="CALENDAR">
+                <div id="date">
+                    <h:outputText value="#{employee.date}"/>
+                </div>
             </p:column>
             <p:column headerText="#{msg['message.edit']}">
                 <p:commandButton value="Edit" action="#{employees.editEmployeeRecord(employee.id)}"
-                                 oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog">
+                                 style="border-radius:0; margin-left: 36%"
+                                 oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog" process="@this"
+                                 resetValues="true">
                 </p:commandButton>
 
 
@@ -59,8 +69,9 @@
             <p:column headerText="#{msg['message.delete']}">
 
                 <p:commandButton id="remove" value="Delete" update="employeeTable" style="margin-right:20px;"
-                                 action="#{employees.deleteEmployeeRecord(employee.id)}"
-                                 onclick="return confirm('Are you sure?')">
+                                 actionListener="#{employees.deleteEmployeeRecord(employee.id)}"
+                                  process="@this">
+                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
                 </p:commandButton>
 
 
@@ -69,10 +80,15 @@
 
         </p:dataTable>
     </h:panelGroup>
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
+        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    </p:confirmDialog>
     <!--Add section-->
 
 
-    <p:dialog header="Dynamic Focus" widgetVar="dlg" modal="true" closable="false" closeOnEscape="true" id="dialog">
+    <p:dialog header="Create new Employee" widgetVar="dlg" modal="true" closable="false" closeOnEscape="true"
+              id="dialog">
         <components:customComponents
                 nameValue="#{employees.name}"
                 nameErrorRender="#{employees.nameError}"

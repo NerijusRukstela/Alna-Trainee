@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+
+
+<h:head>
+    <title>Title123</title>
+</h:head>
+
+<h:body>
+    <h1> Employees List </h1>
+
+    <p:commandButton value="Create New Employee" action="#{employees.clear}" immediate="true" />
+    <h:form id="employeeForm">
+
+
+
+        <p:dataTable id="employeeTable" var="employee" binding="#{table}" value="#{employees.getEmployeesList()}">
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.id']}"/>
+                </f:facet>
+                <h:outputText value="#{employee.id}"/>
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.name']}"/>
+                </f:facet>
+                <h:outputText value="#{employee.name}"/>
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.position']}"/>
+                </f:facet>
+                <h:outputText value="#{employee.position}"/>
+            </p:column>
+
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.department']}"/>
+                </f:facet>
+                <h:outputText value="#{employee.department}"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.edit']}"/>
+                </f:facet>
+                <p:commandButton value="Edit" id="nonAjax1" action="#{employees.editEmployeeRecord(employee.id)}"
+                                 ajax="false"/>
+            </p:column>
+            <p:column>
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.delete']}"/>
+                </f:facet>
+                <p:commandButton value="Delete" action="#{employees.deleteEmployeeRecord(employee.id)}"
+                                 update="employeeForm">
+                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" closable="false"/>
+                </p:commandButton>
+
+
+            </p:column>
+        </p:dataTable>
+
+
+        <p:confirmDialog global="true">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+        </p:confirmDialog>
+
+    </h:form>
+
+</h:body>
+
+</html>

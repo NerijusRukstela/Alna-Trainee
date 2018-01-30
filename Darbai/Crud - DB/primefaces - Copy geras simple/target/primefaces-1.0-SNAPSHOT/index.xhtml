@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+
+
+<head>
+    <title>Title123</title>
+</head>
+<body>
+<h:body>
+    <h:outputText value="Employee List"/>
+
+    <h:form id="employeeForm">
+
+        <h:commandButton action="#{employees.clear}" value="Create New Employee"/>
+        <h:dataTable id="employeeTable" var="employee" binding="#{table}" value="#{employees.employeesList()}">
+            <!---->
+
+            <h:column>
+
+
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.id']}" />
+                </f:facet>
+
+                <h:outputText value="#{employee.id}"/>
+
+            </h:column>
+
+            <h:column>
+
+                <f:facet name="header" >
+                    <h:outputText value="#{msg['message.name']}" />
+                </f:facet>
+
+                <h:outputText value="#{employee.name}"/>
+
+            </h:column>
+
+            <h:column>
+
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.position']}" />
+                </f:facet>
+
+                <h:outputText value="#{employee.position}"/>
+
+            </h:column>
+
+            <h:column>
+
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.department']}" />
+                </f:facet>
+
+                <h:outputText value="#{employee.department}"/>
+
+            </h:column>
+            <h:column>
+
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.edit']}" />
+                </f:facet>
+
+                <!--todo T: i viena BB action metoda-->
+
+                <h:commandButton action="#{employees.editEmployeeRecord(employee.id)}" value="Edit"  />
+
+
+            </h:column>
+
+            <h:column>
+
+                <f:facet name="header">
+                    <h:outputText value="#{msg['message.delete']}" />
+                </f:facet>
+
+                <h:commandButton update="employeeTable" action="#{employees.deleteEmployeeRecord(employee.id)}"
+                                 value="Delete"/>
+
+            </h:column>
+
+
+        </h:dataTable>
+
+    </h:form>
+
+
+</h:body>
+</body>
+</html>

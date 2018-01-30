@@ -18,7 +18,7 @@ public class LazyModelHolder extends LazyDataModel<Employee> {
     @Override
     public List<Employee> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         this.setRowCount(e.getTotalNumberOfEmployees());
-        return e.getSelectedEmployees(first, pageSize, sortField, sortOrder);
+        return e.getSelectedEmployees(first, pageSize, sortField, sortOrder, filters);
 
     }
 }

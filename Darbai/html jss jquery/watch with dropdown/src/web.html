@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clock</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <link href="http://code.gijgo.com/1.6.1/css/gijgo.css" rel="stylesheet" type="text/css"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+    <script src="http://code.gijgo.com/1.6.1/js/gijgo.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+
+    <script src="jss.js"></script>
+
+
+</head>
+<body onload="selectHour()">
+<form>
+    <div class="container">
+
+        <div class="row">
+            <div class="col-sm-7">
+                <h1>Angle between arrows</h1>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <ul id="errorList" class="alert alert-danger d-none  errorElement">
+
+                    <li id="hoursEmpty" class="d-none  errorElement">
+                        <p>
+                            <strong>Danger!</strong> Hours field is Empty.
+                        </p>
+                    </li>
+                    <li id="hoursInccorect" class="d-none  errorElement">
+                        <p>
+                            <strong>Danger!</strong> Incorrect positive integer in hours field.
+                        </p>
+                    </li>
+                    <li id="minutesEmpty" class="d-none  errorElement">
+                        <p>
+                            <strong>Danger!</strong> Minutes field is Empty.
+                        </p>
+                    </li>
+                    <li id="minutesInccorect" class="d-none  errorElement">
+                        <p>
+                            <strong>Danger!</strong> Incorrect positive integer in minutes field.
+                        </p>
+                    </li>
+                    <li id="checkBoxError" class="d-none  errorElement">
+                        <p>
+                            <strong>Danger!</strong> Please click on checkBox.
+                        </p>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <label>
+                    Insert hours:
+                </label>
+
+
+            </div>
+            <div class="col-sm-2">
+                <input id="hours" type="text" placeholder="Hours" class="form-control errorBorder">
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <label>
+                    Insert minutes:
+                </label>
+            </div>
+            <div class="col-sm-2">
+                <input id="minutes" type="text" placeholder="Minutes" class="form-control errorBorder">
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <p>Date: <input type="text" id="date" class="form-control"></p>
+            </div>
+        </div>
+        <label id="check1" class="form-check-label errorBorder">
+            <input type="checkbox" id="check">
+            I'm not a robot
+        </label>
+        <br>
+
+        <button id="button" class="btn btn-primary">Submit</button>
+    </div>
+
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown button
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" value="0">1</a>
+            <a class="dropdown-item" value="1">2</a>
+            <a class="dropdown-item" value="2">3</a>
+        </div>
+    </div>
+
+
+<select class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <option value="0">0</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+</select>
+
+
+
+</form>
+
+<form >
+    <fieldset>
+        <label for="ccexpy">Hours</label>
+        <select id="ccexpy">
+
+        </select>
+    </fieldset>
+
+</form>
+
+
+<br>
+<p id="answer"></p>
+
+
+</div>
+</body>
+</html>
