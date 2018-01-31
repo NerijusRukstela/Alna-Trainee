@@ -7,26 +7,24 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
 >
-
 <composite:interface>
     <composite:attribute name="title" required="false" shortDescription="title field is not required" />
     <composite:attribute name="value" required="true" shortDescription="input field is required"/>
-    <composite:attribute name="errorRender"/>
-    <composite:attribute name="idAndMessage"/>
-    <composite:attribute name="requiredMessage"/>
-    <composite:attribute name="validatorMessage"/>
-    <composite:attribute name="maxInputLength"/>
-    <composite:attribute name="requiredValue"/>
+    <composite:attribute name="idAndMessage"  required="true"/>
+    <composite:attribute name="requiredMessage" default="false" />
+    <composite:attribute name="validatorMessage" default="false"/>
+    <composite:attribute name="maxInputLength" default="30"/>
+    <composite:attribute name="minInputLength" default="0"/>
+    <composite:attribute name="requiredValue" default="false"/>
 </composite:interface>
 <composite:implementation>
     <h:panelGrid columns="1" >
         <p:outputLabel for="#{cc.attrs.idAndMessage}" value="#{cc.attrs.title}"/>
         <p:inputText id="#{cc.attrs.idAndMessage}" value="#{cc.attrs.value}" required="#{cc.attrs.requiredValue}"
                      requiredMessage="#{cc.attrs.requiredMessage}" validatorMessage="#{cc.attrs.validatorMessage}">
-            <f:validateLength maximum="#{cc.attrs.maxInputLength}"/>
+            <f:validateLength minimum="#{cc.attrs.minInputLength}" maximum="#{cc.attrs.maxInputLength}"/>
         </p:inputText>
         <p:message for="#{cc.attrs.idAndMessage}"/>
     </h:panelGrid>
 </composite:implementation>
-
 </html>

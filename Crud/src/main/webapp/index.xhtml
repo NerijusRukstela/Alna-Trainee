@@ -3,7 +3,7 @@
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:component="http://java.sun.com/jsf/composite/customComponents"
+      xmlns:component="http://java.sun.com/jsf/composite/components"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
@@ -70,7 +70,6 @@
                 <component:employeeFormComponent
                         title="#{msg['message.nameEditCreate']}"
                         value="#{employees.name}"
-                        errorRender="#{employees.nameError}"
                         idAndMessage="name"
                         requiredMessage="Please enter Name"
                         validatorMessage="The Name is too long"
@@ -80,7 +79,6 @@
                 <component:employeeFormComponent
                         title="#{msg['message.positionEditCreate']}"
                         value="#{employees.position}"
-                        errorRender="#{employees.positionError}"
                         idAndMessage="position"
                         requiredMessage="Please enter Position"
                         validatorMessage="The Position is too long"
@@ -90,7 +88,6 @@
                 <component:employeeFormComponent
                         title="#{msg['message.departmentEditCreate']}"
                         value="#{employees.department}"
-                        errorRender="#{employees.departmentError}"
                         idAndMessage="department"
                         requiredMessage="Please enter Department"
                         validatorMessage="The Department is too long"

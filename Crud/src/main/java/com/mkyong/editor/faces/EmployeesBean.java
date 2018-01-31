@@ -31,13 +31,11 @@ public class EmployeesBean implements Serializable {
     private EmployeeActions employeeActions;
     private LazyDataModel<Employee> lazyModel;
 
-
     @PostConstruct
     public void init() {
         employeeActions = new InDbEmployeeActions();
         lazyModel = new LazyModelHolder(employeeActions);
     }
-
 
     public LazyDataModel<Employee> getLazyModel() {
 
@@ -49,7 +47,6 @@ public class EmployeesBean implements Serializable {
 
         return today;
     }
-
 
     public String changeTrueAddButton() {
         add = true;

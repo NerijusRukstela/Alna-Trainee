@@ -4,15 +4,12 @@
 /*font-size: 30px;*/
 /*}*/
 
-/*.ui-datatable-tablewrapper td[role="gridcell"]{*/
-/*font-size: 10px;*/
-/*}*/
+.ui-datatable-tablewrapper td[role="gridcell"]{
+font-size: 10px;
+}
 
 div:nth-of-type(3) {
 
 }
 
-
-
-/* non-essential decorative styles */
 
