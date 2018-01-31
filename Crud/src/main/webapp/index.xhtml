@@ -3,25 +3,19 @@
         PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:components="http://java.sun.com/jsf/composite/customComponents"
+      xmlns:component="http://java.sun.com/jsf/composite/customComponents"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core"
 >
-
-
 <h:head>
     <h:outputStylesheet name="dialog-style.css" library="css"/>
-
     <title>Crud</title>
 </h:head>
-
 <h:body>
     <div id="title">
         <h1> Employees List </h1>
     </div>
-
-
     <div id="add">
         <p:commandButton value="Add" styleClass="ui-priority-primary"
                          process="@this" oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog"
@@ -34,19 +28,15 @@
                      rows="5"
                      paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport}
                       {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10">
-            <!--<p:ajax event="sort" listener="#{employees.onSort}"/>-->
             <p:column headerText="#{msg['message.id']}" sortBy="#{employee.id}" id="ID">
-
                 <h:outputText value="#{employee.id}"/>
             </p:column>
-
             <p:column headerText="#{msg['message.name']}" sortBy="#{employee.name}" id="NAME">
                 <div id="name">
                     <h:outputText value="#{employee.name}"/>
                 </div>
             </p:column>
             <p:column headerText="#{msg['message.position']}" sortBy="#{employee.position}" id="POSITION">
-
                 <h:outputText value="#{employee.position}"/>
             </p:column>
             <p:column headerText="#{msg['message.department']}" sortBy="#{employee.department}" id="DEPARTMENT">
@@ -63,87 +53,110 @@
                                  oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog" process="@this"
                                  resetValues="true">
                 </p:commandButton>
-
-
             </p:column>
             <p:column headerText="#{msg['message.delete']}">
-
                 <p:commandButton id="remove" value="Delete" update="employeeTable" style="margin-right:20px;"
                                  actionListener="#{employees.deleteEmployeeRecord(employee.id)}"
-                                  process="@this">
-                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                 process="@this">
+                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert"/>
                 </p:commandButton>
-
-
             </p:column>
-
-
         </p:dataTable>
     </h:panelGroup>
-    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
-        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-    </p:confirmDialog>
-    <!--Add section-->
-
-
     <p:dialog header="Create new Employee" widgetVar="dlg" modal="true" closable="false" closeOnEscape="true"
               id="dialog">
-        <components:customComponents
-                nameValue="#{employees.name}"
-                nameErrorRender="#{employees.nameError}"
-                positionValue="#{employees.position}"
-                positionErrorRender="#{employees.positionError}"
-                departmentValue="#{employees.department}"
-                departmentErrorRender="#{employees.departmentError}"
-                dataValue="#{employees.date}"
-                dataErrorRender="#{employees.dateError}"
-
-                addButton="#{employees.addEmployee()}"
-                saveButton="#{employees.updateEmployeeDetails()}"
-                calcel="#{employees.exitAndClear}"
-        />
+        <h:form id="employeeForm">
+            <h:panelGrid id="popup" columns="1" cellpadding="5">
+                <component:employeeFormComponent
+                        title="#{msg['message.nameEditCreate']}"
+                        value="#{employees.name}"
+                        errorRender="#{employees.nameError}"
+                        idAndMessage="name"
+                        requiredMessage="Please enter Name"
+                        validatorMessage="The Name is too long"
+                        maxInputLength="45"
+                        requiredValue="true"
+                />
+                <component:employeeFormComponent
+                        title="#{msg['message.positionEditCreate']}"
+                        value="#{employees.position}"
+                        errorRender="#{employees.positionError}"
+                        idAndMessage="position"
+                        requiredMessage="Please enter Position"
+                        validatorMessage="The Position is too long"
+                        maxInputLength="45"
+                        requiredValue="true"
+                />
+                <component:employeeFormComponent
+                        title="#{msg['message.departmentEditCreate']}"
+                        value="#{employees.department}"
+                        errorRender="#{employees.departmentError}"
+                        idAndMessage="department"
+                        requiredMessage="Please enter Department"
+                        validatorMessage="The Department is too long"
+                        maxInputLength="45"
+                        requiredValue="true"
+                />
+                <p:outputLabel for="dates" value="#{msg['message.dataEditCreate']}"/>
+                <p:calendar id="dates" value="#{employees.date}" pattern="yyyy-MM-dd" maxlength="10"
+                            maxdate="#{employees.today()}"
+                            requiredMessage="Please enter Date"
+                            converterMessage="could not be understood as a date. Example: 2018-01-30"
+                            required="true" validator="#{employees.validate}">
+                </p:calendar>
+                <p:message for="dates"/>
+                <p:commandButton value="Add" action="#{employees.addEmployee}" rendered="#{employees.add}"
+                                 update="popup employeeTable" styleClass="ui-priority-primary"
+                                 oncomplete="handleLoginRequestAdd(xhr, status, args)">
+                </p:commandButton>
+                <p:commandButton value="save" action="#{employees.updateEmployeeDetails}" update="popup employeeTable"
+                                 rendered="#{employees.save}" styleClass="ui-priority-primary"
+                                 oncomplete="handleLoginRequestEdit(xhr, status, args)">
+                </p:commandButton>
+                <p:commandButton value="View Employees Record List" action="#{employees.exitAndClear}"
+                                 update="popup employeeTable" styleClass="ui-priority-primary"
+                                 oncomplete="handleLoginRequestExitAndClear(xhr, status, args)">
+                </p:commandButton>
+            </h:panelGrid>
+        </h:form>
     </p:dialog>
-
-    <!--Edit section-->
-
-    <script type="text/javascript">
-        function handleLoginRequestExitAndClear(xhr, status, args) {
-            if (!args.notValid9) {
-                PF('dlg').hide();
-            }
-            else {
-                PF('dlg').hide();
-            }
-        }
-
-        function handleLoginRequestAdd(xhr, status, args) {
-            if (!args.notValid) {
-                PF('dlg').jq.effect("shake", {times: 5}, 100);
-            }
-            else {
-                PF('dlg').hide();
-            }
-        }
-
-        function handleLoginRequestEdit(xhr, status, args) {
-            if (!args.notValid) {
-                PF('dlg').jq.effect("shake", {times: 5}, 100);
-            }
-            else {
-                PF('dlg').hide();
-            }
-        }
-
-        function handleLoginRequest1(xhr, status, args) {
-            if (!args.notValid123) {
-                PF('dlg').show();
-            }
-            else {
-                PF('dlg').show();
-            }
-        }
-    </script>
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
+        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+    </p:confirmDialog>
 </h:body>
-
+<script type="text/javascript">
+    function handleLoginRequestExitAndClear(xhr, status, args) {
+        if (!args.notValid9) {
+            PF('dlg').hide();
+        }
+        else {
+            PF('dlg').hide();
+        }
+    }
+    function handleLoginRequestAdd(xhr, status, args) {
+        if (!args.notValid) {
+            PF('dlg').jq.effect("shake", {times: 5}, 100);
+        }
+        else {
+            PF('dlg').hide();
+        }
+    }
+    function handleLoginRequestEdit(xhr, status, args) {
+        if (!args.notValid) {
+            PF('dlg').jq.effect("shake", {times: 5}, 100);
+        }
+        else {
+            PF('dlg').hide();
+        }
+    }
+    function handleLoginRequest1(xhr, status, args) {
+        if (!args.notValid123) {
+            PF('dlg').show();
+        }
+        else {
+            PF('dlg').show();
+        }
+    }
+</script>
 </html>

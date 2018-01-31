@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+
+<composite:interface>
+    <composite:attribute name="title" required="false" shortDescription="title field is not required" />
+    <composite:attribute name="value" required="true" shortDescription="input field is required"/>
+    <composite:attribute name="errorRender"/>
+    <composite:attribute name="idAndMessage"/>
+    <composite:attribute name="requiredMessage"/>
+    <composite:attribute name="validatorMessage"/>
+    <composite:attribute name="maxInputLength"/>
+    <composite:attribute name="requiredValue"/>
+</composite:interface>
+<composite:implementation>
+    <h:panelGrid columns="1" >
+        <p:outputLabel for="#{cc.attrs.idAndMessage}" value="#{cc.attrs.title}"/>
+        <p:inputText id="#{cc.attrs.idAndMessage}" value="#{cc.attrs.value}" required="#{cc.attrs.requiredValue}"
+                     requiredMessage="#{cc.attrs.requiredMessage}" validatorMessage="#{cc.attrs.validatorMessage}">
+            <f:validateLength maximum="#{cc.attrs.maxInputLength}"/>
+        </p:inputText>
+        <p:message for="#{cc.attrs.idAndMessage}"/>
+    </h:panelGrid>
+</composite:implementation>
+
+</html>
