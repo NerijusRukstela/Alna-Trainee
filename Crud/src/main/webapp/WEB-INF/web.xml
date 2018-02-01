@@ -97,7 +97,7 @@
 
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>sunny</param-value>
+		<param-value>bootstrap</param-value>
 	</context-param>
 
 

@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Locale;
 
 @ManagedBean(name = "employees")
 @SessionScoped
@@ -30,12 +31,31 @@ public class EmployeesBean implements Serializable {
     private boolean add = false;
     private EmployeeActions employeeActions;
     private LazyDataModel<Employee> lazyModel;
+    private String language;
 
     @PostConstruct
     public void init() {
         employeeActions = new InDbEmployeeActions();
         lazyModel = new LazyModelHolder(employeeActions);
+
     }
+
+    private Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public String getLanguage() {
+        return locale.getLanguage();
+    }
+
+    public void changeLanguage(String language) {
+        this.language = language;
+        locale = new Locale(language);
+        FacesContext.getCurrentInstance().getViewRoot().setLocale(new Locale(language));
+    }
+
 
     public LazyDataModel<Employee> getLazyModel() {
 
@@ -109,14 +129,14 @@ public class EmployeesBean implements Serializable {
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         Date today = new Date();
 
-        if (((Date) value).after(today)) {
+        if ((((Date) value).after(today)) && language.equals("")) {
             context = FacesContext.getCurrentInstance();
             context.addMessage(component.getClientId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Date does not exists"));
-        } else {
 
-            return;
+        }else if (((((Date) value).after(today)) && language.equals("lt"))){
+            context = FacesContext.getCurrentInstance();
+            context.addMessage(component.getClientId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Jūsų pasirinkta data neegzistuoja"));
         }
-
 
     }
 

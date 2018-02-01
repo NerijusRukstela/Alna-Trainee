@@ -16,13 +16,21 @@
     <div id="title">
         <h1> Employees List </h1>
     </div>
-    <div id="add">
-        <p:commandButton value="Add" styleClass="ui-priority-primary"
+
+
+    <h:form>
+        <p:commandButton action="#{employees.changeLanguage('')}" update="employeeTable add" value="EN"/>
+        <h:outputText value=" " />
+        <p:commandButton action="#{employees.changeLanguage('lt')}" update="employeeTable add" value="LT" />
+    </h:form>
+
+
+        <p:commandButton id="add" value="#{msg['message.addButton']}" styleClass="ui-priority-primary"
                          process="@this" oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog"
                          resetValues="true">
             <p:ajax listener="#{employees.opendialog}"/>
         </p:commandButton>
-    </div>
+
     <h:panelGroup id="wrapper" style="padding: 10px 10px">
         <p:dataTable id="employeeTable" var="employee" value="#{employees.lazyModel}" lazy="true" paginator="true"
                      rows="5"
@@ -48,14 +56,14 @@
                 </div>
             </p:column>
             <p:column headerText="#{msg['message.edit']}">
-                <p:commandButton value="Edit" action="#{employees.editEmployeeRecord(employee.id)}"
+                <p:commandButton value="#{msg['message.editButton']}" action="#{employees.editEmployeeRecord(employee.id)}"
                                  style="border-radius:0; margin-left: 36%"
                                  oncomplete="handleLoginRequest1(xhr, status, args)" update="dialog" process="@this"
                                  resetValues="true">
                 </p:commandButton>
             </p:column>
             <p:column headerText="#{msg['message.delete']}">
-                <p:commandButton id="remove" value="Delete" update="employeeTable" style="margin-right:20px;"
+                <p:commandButton id="remove" value="#{msg['message.deleteButton']}" update="employeeTable" style="margin-right:20px;"
                                  actionListener="#{employees.deleteEmployeeRecord(employee.id)}"
                                  process="@this">
                     <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert"/>
@@ -63,7 +71,7 @@
             </p:column>
         </p:dataTable>
     </h:panelGroup>
-    <p:dialog header="Create new Employee" widgetVar="dlg" modal="true" closable="false" closeOnEscape="true"
+    <p:dialog header="#{msg['message.dialogHeader']}" widgetVar="dlg" modal="true" closable="false" closeOnEscape="true"
               id="dialog">
         <h:form id="employeeForm">
             <h:panelGrid id="popup" columns="1" cellpadding="5">
@@ -71,8 +79,8 @@
                         title="#{msg['message.nameEditCreate']}"
                         value="#{employees.name}"
                         idAndMessage="name"
-                        requiredMessage="Please enter Name"
-                        validatorMessage="The Name is too long"
+                        requiredMessage="#{msg['message.nameValidate']}"
+                        validatorMessage="#{msg['message.nameValidateToLong']}"
                         maxInputLength="45"
                         requiredValue="true"
                 />
@@ -80,8 +88,8 @@
                         title="#{msg['message.positionEditCreate']}"
                         value="#{employees.position}"
                         idAndMessage="position"
-                        requiredMessage="Please enter Position"
-                        validatorMessage="The Position is too long"
+                        requiredMessage="#{msg['message.positionValidate']}"
+                        validatorMessage="#{msg['message.positionValidateToLong']}"
                         maxInputLength="45"
                         requiredValue="true"
                 />
@@ -89,38 +97,42 @@
                         title="#{msg['message.departmentEditCreate']}"
                         value="#{employees.department}"
                         idAndMessage="department"
-                        requiredMessage="Please enter Department"
-                        validatorMessage="The Department is too long"
+                        requiredMessage="#{msg['message.departmentValidate']}"
+                        validatorMessage="#{msg['message.departmentValidateToLong']}"
                         maxInputLength="45"
                         requiredValue="true"
                 />
-                <p:outputLabel for="dates" value="#{msg['message.dataEditCreate']}"/>
+                <p:outputLabel value="#{msg['message.dataEditCreate']}"/>
                 <p:calendar id="dates" value="#{employees.date}" pattern="yyyy-MM-dd" maxlength="10"
                             maxdate="#{employees.today()}"
-                            requiredMessage="Please enter Date"
-                            converterMessage="could not be understood as a date. Example: 2018-01-30"
+                            requiredMessage="#{msg['message.calendarValidate']}"
+                            converterMessage="#{msg['message.calendarValidateNotUnderstand']}"
                             required="true" validator="#{employees.validate}">
                 </p:calendar>
                 <p:message for="dates"/>
-                <p:commandButton value="Add" action="#{employees.addEmployee}" rendered="#{employees.add}"
+                <p:commandButton value="#{msg['message.addButton']}" action="#{employees.addEmployee}" rendered="#{employees.add}"
                                  update="popup employeeTable" styleClass="ui-priority-primary"
                                  oncomplete="handleLoginRequestAdd(xhr, status, args)">
                 </p:commandButton>
-                <p:commandButton value="save" action="#{employees.updateEmployeeDetails}" update="popup employeeTable"
+                <p:commandButton value="#{msg['message.saveButton']}" action="#{employees.updateEmployeeDetails}" update="popup employeeTable"
                                  rendered="#{employees.save}" styleClass="ui-priority-primary"
                                  oncomplete="handleLoginRequestEdit(xhr, status, args)">
                 </p:commandButton>
-                <p:commandButton value="View Employees Record List" action="#{employees.exitAndClear}"
+                <p:commandButton value="#{msg['message.cancel']}" action="#{employees.exitAndClear}"
                                  update="popup employeeTable" styleClass="ui-priority-primary"
                                  oncomplete="handleLoginRequestExitAndClear(xhr, status, args)">
                 </p:commandButton>
             </h:panelGrid>
         </h:form>
     </p:dialog>
+
+
     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" closable="false">
         <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
     </p:confirmDialog>
+
+
 </h:body>
 <script type="text/javascript">
     function handleLoginRequestExitAndClear(xhr, status, args) {
