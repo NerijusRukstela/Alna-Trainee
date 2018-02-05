@@ -1,0 +1,3 @@
+git add */test1.txt/test2.txt
+git commit -m "cia yra mano commitas, sis pakeitimas keliaja is staging i lokalia repo"
+git push -> is local rpeo i nutolusia 
